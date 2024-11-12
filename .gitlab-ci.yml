@@ -1,0 +1,46 @@
+variables:
+  BROWSER:
+    value: 'msedge'
+    options:
+      - 'msedge'
+      - 'chrome'
+      - 'firefox'
+      - 'webkit'
+    description: 'Browser for running tests'
+  WORKERS:
+    value: '1'
+    description: 'Number of parallel running tests'
+
+default:
+  image: mcr.microsoft.com/playwright:v1.46.0-jammy
+  tags:
+    - testtag
+
+stages:          # List of stages for jobs, and their order of execution
+  - test
+
+run-playwright-tests:   # This job runs in the test stage.
+  stage: test    # It only starts when previous jobs complete successfully.
+  script:
+    - apt-get update && apt-get install -y software-properties-common apt-transport-https wget
+    - |
+      if [ "$BROWSER" = "edge" ]; then
+        echo "Installing Microsoft Edge..."
+        wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add -
+        add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+        apt-get update && apt-get install -y microsoft-edge-stable
+      fi
+
+    - npm install # clean install from package.json
+    - npx playwright install $BROWSER  # install browsers and dependencies
+
+    - npx playwright test --project=$BROWSER
+  allow_failure: true
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/**
+    expire_in: 3 days
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - when: manual
