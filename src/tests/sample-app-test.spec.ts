@@ -4,7 +4,6 @@ import { HomePage } from '../pages/home-page';
 import { SampleAppPage } from '../pages/sample-app-page';
 
 test.describe('Sample App Test', () => {
-
   const username = faker.internet.username();
 
   let homePage: HomePage;
@@ -19,9 +18,9 @@ test.describe('Sample App Test', () => {
   });
 
   test('Sample App Login Test', async ({ credentials }) => {
-    await sampleAppPage.fillUsername(username)
-    await sampleAppPage.fillPassword(credentials.password)
-    await sampleAppPage.clickLogin()
-    await sampleAppPage.verifyStatusLoggedIn(username)
+    await sampleAppPage.fillUsername(username);
+    await sampleAppPage.fillPassword(credentials.password);
+    await sampleAppPage.clickLogin();
+    await sampleAppPage.verifyStatusLoggedIn(username);
   });
 });
