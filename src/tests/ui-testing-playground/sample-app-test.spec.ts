@@ -1,7 +1,7 @@
-import { test } from '../config/fixtures';
+import { test } from '../../config/fixtures';
 import { faker } from '@faker-js/faker';
-import { HomePage } from '../pages/home-page';
-import { SampleAppPage } from '../pages/sample-app-page';
+import { HomePage } from '../../pages/ui-testing-playground/home-page';
+import { SampleAppPage } from '../../pages/ui-testing-playground/sample-app-page';
 
 test.describe('Sample App Test', () => {
   const username = faker.internet.username();
